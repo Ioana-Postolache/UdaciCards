@@ -45,7 +45,13 @@ class NewQuestion extends Component {
     question: "",
     answer: ""
   };
+  static navigationOptions = ({ navigation }) => {
+    const { deckId } = navigation.state.params;
 
+    return {
+      title: "New card"
+    };
+  };
   submit = () => {
     const { question, answer } = this.state;
 
