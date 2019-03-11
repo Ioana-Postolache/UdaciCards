@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {
   View,
+  ScrollView,
   Text,
   StyleSheet,
   Platform,
@@ -37,23 +38,17 @@ class DeckList extends Component {
   render() {
     const { studiedToday, decks } = this.props;
     const { ready } = this.state;
-
-    console.log(
-      "rendeeeeeeeeeeeeeeeeer..................................",
-      JSON.stringify(Object.keys(decks).length)
-    );
-
+    console.log("DeckList           ", decks);
     if (ready === false) {
       return <AppLoading />;
     }
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <HeaderView headerText={"Deck List"} />
         <View style={styles.stretch}>
           {Object.keys(decks).length !== 0 ? (
             Object.keys(decks).map(key => {
-              console.log("key", key);
-              return (
+              return decks[key] !== null ? (
                 <TouchableOpacity
                   style={styles.deck}
                   key={key}
@@ -68,13 +63,13 @@ class DeckList extends Component {
                     {decks[key].questions.length} questions
                   </Text>
                 </TouchableOpacity>
-              );
+              ) : null;
             })
           ) : (
             <Text style={styles.item}>DeckList</Text>
           )}
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -121,10 +116,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   const { decks, studiedToday } = state;
-  console.log(
-    "mapStateToProps decks...",
-    JSON.stringify(Object.keys(decks).length)
-  );
+
   return {
     decks,
     studiedToday

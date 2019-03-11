@@ -14,6 +14,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Constants } from "expo";
 import IndividualDeck from "./components/IndividualDeck";
 import NewQuestion from "./components/NewQuestion";
+import Quiz from "./components/Quiz";
 import { setLocalNotification } from "./utils/helpers";
 
 function UdaciStatusBar({ backgroundColor, ...props }) {
@@ -83,6 +84,15 @@ const MainNavigator = createStackNavigator({
   },
   NewQuestion: {
     screen: NewQuestion,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple
+      }
+    }
+  },
+  Quiz: {
+    screen: Quiz,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {

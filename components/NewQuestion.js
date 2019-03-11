@@ -15,7 +15,7 @@ import {
   setLocalNotification
 } from "../utils/helpers";
 import { Ionicons } from "@expo/vector-icons";
-import { submitQuestion } from "../utils/api";
+import { addQuestionToDeck } from "../utils/api";
 import { connect } from "react-redux";
 import { addQuestion } from "../actions";
 import HeaderView from "./HeaderView";
@@ -49,17 +49,24 @@ class NewQuestion extends Component {
   submit = () => {
     const { question, answer } = this.state;
 
+    const deckId = this.props.deck.title;
+    console.log("NewQuestion deckId", deckId);
+    const q = {
+      deckId,
+      questionBody: { question, answer }
+    };
     this.props.dispatch(
-      addQuestion({
-        [title]: question
-      })
+      addQuestion(q)
     );
 
     this.setState(() => ({ question: "", answer: "" }));
 
     this.toHome();
 
-    submitQuestion(title, question);
+    addQuestionToDeck({
+      deckId,
+      questionBody: { question, answer }
+    });
   };
 
   toHome = () => {
@@ -67,6 +74,7 @@ class NewQuestion extends Component {
       NavigationActions.back({ key: "NewQuestion" })
     );
   };
+
   render() {
     return (
       <View style={styles.container}>
@@ -146,4 +154,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect()(NewQuestion);
+function mapStateToProps({ decks }, { navigation }) {
+  const { deckId } = navigation.state.params;
+
+  return {
+    deck: decks[deckId]
+  };
+}
+export default connect(mapStateToProps)(NewQuestion);

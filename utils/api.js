@@ -15,6 +15,24 @@ export function submitDeck(title, deck) {
   );
 }
 
+export function addQuestionToDeck(question) {
+  const { deckId, questionBody } = question;
+  return AsyncStorage.getItem(DECK_STORAGE_KEY)
+    .then(results => {
+      decks=JSON.parse(results)
+      return {
+        ...decks,
+        [deckId]: {
+          ...decks[deckId],
+          questions: decks[deckId].questions.concat(questionBody)
+        }
+      };
+    })
+    .then(newResults =>
+      AsyncStorage.mergeItem(DECK_STORAGE_KEY, JSON.stringify(newResults))
+    );
+}
+
 export function removeDeck(title) {
   return AsyncStorage.getItem(DECK_STORAGE_KEY).then(results => {
     const data = JSON.parse(results);

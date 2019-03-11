@@ -29,12 +29,7 @@ export function setDummyData() {
     }
   };
 
-  console.log("dummyData...", JSON.stringify(Object.keys(dummyData).length));
-  AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(dummyData), () => {
-    AsyncStorage.getItem(DECK_STORAGE_KEY, (err, result) => {
-      console.log("result...", result);
-    });
-  });
+  AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(dummyData));
 
   return dummyData;
 }

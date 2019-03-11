@@ -7,7 +7,7 @@ import {
   Platform
 } from "react-native";
 import { connect } from "react-redux";
-import { addDeck } from "../actions";
+import { deleteDeck } from "../actions";
 import { removeDeck } from "../utils/api";
 import { getDailyReminderValue } from "../utils/helpers";
 import TextButton from "./TextButton";
@@ -34,18 +34,51 @@ class IndividualDeck extends Component {
       title: deckId
     };
   };
+  deleteDeck = deckId => {
+    const { dispatch } = this.props;
+    dispatch(
+      deleteDeck({
+        deckId
+      })
+    );
+    this.goBack();
+    removeDeck(deckId);
+  };
+  goBack = () => this.props.navigation.goBack();
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.deck !== null;
+  }
 
   render() {
     const { deck } = this.props;
 
+    console.log("rerendering Individual Deck");
+    const key = deck.title;
     return (
       <View style={styles.container}>
         <Text style={styles.item}>{deck.title}</Text>
         <Text style={styles.questions}>{deck.questions.length} questions</Text>
-        <ActionButton action={() =>
-          (this.props.navigation.navigate("NewQuestion"))} label={"ADD CARD"}/>
-        <ActionButton action={this.startQuiz} label={"START QUIZ"} />
-        <ActionButton action={this.deleteDeck} label={"DELETE DECK"} />
+        <ActionButton
+          action={() => {
+            return this.props.navigation.navigate("NewQuestion", {
+              deckId: key
+            });
+          }}
+          label={"ADD CARD"}
+        />
+        <ActionButton
+          action={() => {
+            return this.props.navigation.navigate("Quiz", {
+              deckId: key
+            });
+          }}
+          label={"START QUIZ"}
+        />
+        <ActionButton
+          action={() => this.deleteDeck(key)}
+          label={"DELETE DECK"}
+        />
       </View>
     );
   }
@@ -101,20 +134,4 @@ function mapStateToProps({ decks }, { navigation }) {
   };
 }
 
-function mapDispatchToProps(dispatch, { navigation }) {
-  const { deckId } = navigation.state.params;
-  return {
-    remove: () =>
-      dispatch(
-        addDeck({
-          [deckId]: timeToString() === deckId ? getDailyReminderValue() : null
-        })
-      ),
-    goBack: () => navigation.goBack()
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IndividualDeck);
+export default connect(mapStateToProps)(IndividualDeck);
