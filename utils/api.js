@@ -24,7 +24,8 @@ export function addQuestionToDeck(question) {
         ...decks,
         [deckId]: {
           ...decks[deckId],
-          questions: decks[deckId].questions.concat(questionBody)
+          questions: [...decks[deckId].questions,
+          questionBody]
         }
       };
     })

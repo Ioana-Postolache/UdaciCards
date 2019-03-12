@@ -67,10 +67,12 @@ class Quiz extends Component {
     console.log("side....", side);
 
     if (len === 0) {
-      <Text style={styles.item}>
-        Sorry, there are no cards in this deck. Add some cards to this deck and
-        then start the quiz.
-      </Text>;
+      return (
+        <Text style={styles.item}>
+          Sorry, there are no cards in this deck. Add some cards to this deck
+          and then start the quiz.
+        </Text>
+      );
     }
     return (
       <View style={styles.container}>
