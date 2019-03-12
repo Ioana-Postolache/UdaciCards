@@ -63,8 +63,6 @@ class Quiz extends Component {
         : Math.round((correctAnswers / answeredQuestions) * 100);
     const questionsLeft = len - questionIndex - 1;
 
-    console.log("questionIndex....", questionIndex);
-    console.log("side....", side);
 
     if (len === 0) {
       return (

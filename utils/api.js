@@ -17,21 +17,16 @@ export function submitDeck(title, deck) {
 
 export function addQuestionToDeck(question) {
   const { deckId, questionBody } = question;
-  return AsyncStorage.getItem(DECK_STORAGE_KEY)
-    .then(results => {
-      decks=JSON.parse(results)
-      return {
-        ...decks,
-        [deckId]: {
-          ...decks[deckId],
-          questions: [...decks[deckId].questions,
-          questionBody]
-        }
-      };
+  return;
+  AsyncStorage.mergeItem(
+    DECK_STORAGE_KEY,
+    JSON.stringify({
+      [deckId]: {
+        ...decks[deckId],
+        questions: [...decks[deckId].questions, questionBody]
+      }
     })
-    .then(newResults =>
-      AsyncStorage.mergeItem(DECK_STORAGE_KEY, JSON.stringify(newResults))
-    );
+  );
 }
 
 export function removeDeck(title) {
