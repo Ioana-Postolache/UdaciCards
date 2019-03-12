@@ -13,11 +13,16 @@ import { getDailyReminderValue } from "../utils/helpers";
 import TextButton from "./TextButton";
 import { gray, white, purple } from "../utils/colors";
 
-ActionButton = ({ action, label, key }) => {
+ActionButton = ({ action, label, disabled }) => {
   return (
     <TouchableOpacity
+      disabled={disabled}
       style={
-        Platform.OS === "ios" ? styles.iosSubmitBtn : styles.AndroidSubmitBtn
+        disabled
+          ? { height: 45, backgroundColor: gray, alignSelf: "center" }
+          : Platform.OS === "ios"
+          ? styles.iosSubmitBtn
+          : styles.AndroidSubmitBtn
       }
       onPress={action}
     >
@@ -29,7 +34,10 @@ ActionButton = ({ action, label, key }) => {
 class Quiz extends Component {
   state = {
     questionIndex: 0,
-    side: "question"
+    side: "question",
+    correctAnswers: 0,
+    answeredQuestions: 0,
+    disabled: false
   };
   static navigationOptions = ({ navigation }) => {
     return {
@@ -42,7 +50,21 @@ class Quiz extends Component {
   render() {
     const { questions, title } = this.props.deck;
     const len = questions.length;
-    const { questionIndex } = this.state;
+    const {
+      questionIndex,
+      side,
+      correctAnswers,
+      disabled,
+      answeredQuestions
+    } = this.state;
+    const score =
+      correctAnswers === 0
+        ? 0
+        : Math.round((correctAnswers / answeredQuestions) * 100);
+    const questionsLeft = len - questionIndex - 1;
+
+    console.log("questionIndex....", questionIndex);
+    console.log("side....", side);
 
     if (len === 0) {
       <Text style={styles.item}>
@@ -50,20 +72,20 @@ class Quiz extends Component {
         then start the quiz.
       </Text>;
     }
-
     return (
       <View style={styles.container}>
-        {
-          <Text style={styles.item}>
-            {this.state.side === "question"
-              ? questions[questionIndex].question
-              : questions[questionIndex].answer}
-          </Text>
-        }
+        <Text style={styles.item}>{score}%</Text>
+        <Text style={styles.item}>{questionsLeft} question(s) left</Text>
+        <Text style={styles.questions}>
+          {this.state.side === "question"
+            ? questions[questionIndex].question
+            : questions[questionIndex].answer}
+        </Text>
+
         <ActionButton
           action={() => {
             return this.setState(prevState => {
-              if ((prevState.side === "question")) {
+              if (prevState.side === "question") {
                 return { side: "answer" };
               }
               return { side: "question" };
@@ -73,6 +95,68 @@ class Quiz extends Component {
             this.state.side === "question" ? "SHOW ANSWER" : "SHOW QUESTION"
           }
         />
+        {this.state.side === "answer" ? (
+          <View style={styles.rowContainer}>
+            <ActionButton
+              action={() => {
+                return this.setState(prevState => {
+                  return {
+                    correctAnswers: prevState.correctAnswers + 1,
+                    disabled: true,
+                    answeredQuestions: prevState.answeredQuestions + 1
+                  };
+                });
+              }}
+              disabled={disabled}
+              label={"CORRECT"}
+            />
+            <ActionButton
+              action={() => {
+                return this.setState(prevState => {
+                  return {
+                    disabled: true,
+                    answeredQuestions: prevState.answeredQuestions + 1
+                  };
+                });
+              }}
+              disabled={disabled}
+              label={"INCORRECT"}
+            />
+          </View>
+        ) : null}
+        {questionIndex + 1 < len ? (
+          <ActionButton
+            action={() => {
+              return this.setState(prevState => {
+                return {
+                  disabled: false,
+                  side: "question",
+                  questionIndex: prevState.questionIndex + 1
+                };
+              });
+            }}
+            label={"NEXT QUESTION"}
+          />
+        ) : (
+          <View style={styles.container}>
+            <ActionButton
+              action={() => {
+                return this.setState({
+                  questionIndex: 0,
+                  side: "question",
+                  correctAnswers: 0,
+                  answeredQuestions: 0,
+                  disabled: false
+                });
+              }}
+              label={"RESTART QUIZ"}
+            />
+            <ActionButton
+              action={() => this.props.navigation.goBack()}
+              label={"BACK TO DECK"}
+            />
+          </View>
+        )}
       </View>
     );
   }
@@ -83,6 +167,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: white,
     padding: 15,
+    justifyContent: "space-between"
+  },
+  rowContainer: {
+    flex: 1,
+    padding: 15,
+    flexDirection: "row",
     justifyContent: "space-around"
   },
   iosSubmitBtn: {
@@ -110,13 +200,15 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   item: {
-    fontSize: 40,
-    textAlign: "center"
+    fontSize: 20,
+    textAlign: "center",
+    padding: 5,
+    color: gray
   },
   questions: {
-    fontSize: 25,
+    fontSize: 40,
     textAlign: "center",
-    color: gray
+    padding: 5
   }
 });
 

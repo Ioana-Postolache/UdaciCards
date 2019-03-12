@@ -53,7 +53,6 @@ class IndividualDeck extends Component {
   render() {
     const { deck } = this.props;
 
-    console.log("rerendering Individual Deck");
     const key = deck.title;
     return (
       <View style={styles.container}>
