@@ -9,7 +9,11 @@ import {
 import { connect } from "react-redux";
 import { deleteDeck } from "../actions";
 import { removeDeck } from "../utils/api";
-import { getDailyReminderValue } from "../utils/helpers";
+import {
+  getDailyReminderValue,
+  clearLocalNotification,
+  setLocalNotification
+} from "../utils/helpers";
 import TextButton from "./TextButton";
 import { gray, white, purple } from "../utils/colors";
 
@@ -137,11 +141,12 @@ class Quiz extends Component {
             label={"NEXT QUESTION"}
           />
         ) : disabled === true ? (
-          <View >
+          <View>
             <Text style={styles.item}>Score: {score}%</Text>
 
             <ActionButton
               action={() => {
+                clearLocalNotification().then(setLocalNotification);
                 return this.setState({
                   questionIndex: 0,
                   side: "question",
