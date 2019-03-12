@@ -53,13 +53,15 @@ class NewDeck extends Component {
 
     this.setState(() => ({ title: "" }));
 
-    this.toHome();
+    this.toIndividualDeck(title);
 
     submitDeck(title, deck);
   };
 
-  toHome = () => {
-    this.props.navigation.dispatch(NavigationActions.back({ key: "NewDeck" }));
+  toIndividualDeck = (key) => {
+    return this.props.navigation.navigate("IndividualDeck", {
+      deckId: key
+    })
   };
   render() {
     return (
