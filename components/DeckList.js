@@ -5,7 +5,8 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Animated
 } from "react-native";
 import { connect } from "react-redux";
 import { receiveDecks, addDeck, setStudiedToday } from "../actions";
@@ -17,7 +18,8 @@ import { AppLoading } from "expo";
 
 class DeckList extends Component {
   state = {
-    ready: false
+    ready: false,
+    opacity: new Animated.Value(0)
   };
 
   componentDidMount() {
@@ -38,7 +40,7 @@ class DeckList extends Component {
   render() {
     const { studiedToday, decks } = this.props;
     const { ready } = this.state;
-    console.log("DeckList           ", decks);
+
     if (ready === false) {
       return <AppLoading />;
     }
@@ -52,10 +54,11 @@ class DeckList extends Component {
                 <TouchableOpacity
                   style={styles.deck}
                   key={key}
-                  onPress={() =>
-                    this.props.navigation.navigate("IndividualDeck", {
+                  onPress={() =>{
+                    Animated.timing(this.state.opacity, {toValue: 1, duration: 1000})
+                    return this.props.navigation.navigate("IndividualDeck", {
                       deckId: key
-                    })
+                    })}
                   }
                 >
                   <Text style={styles.item}>{key}</Text>

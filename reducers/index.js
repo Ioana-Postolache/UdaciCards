@@ -19,7 +19,6 @@ export function decks(state = {}, action) {
     case REMOVE_DECK:
 
       const key = action.deckId.deckId;
-      console.log(REMOVE_DECK, JSON.stringify(key));
       return { ...state, [key]: null };
 
     case ADD_QUESTION:

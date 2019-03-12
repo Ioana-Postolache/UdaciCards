@@ -56,7 +56,7 @@ class NewQuestion extends Component {
     const { question, answer } = this.state;
 
     const deckId = this.props.deck.title;
-    console.log("NewQuestion deckId", deckId);
+
     const q = {
       deckId,
       questionBody: { question, answer }

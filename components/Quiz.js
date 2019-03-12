@@ -63,7 +63,6 @@ class Quiz extends Component {
         : Math.round((correctAnswers / answeredQuestions) * 100);
     const questionsLeft = len - questionIndex - 1;
 
-
     if (len === 0) {
       return (
         <Text style={styles.item}>
@@ -74,7 +73,6 @@ class Quiz extends Component {
     }
     return (
       <View style={styles.container}>
-        <Text style={styles.item}>{score}%</Text>
         <Text style={styles.item}>{questionsLeft} question(s) left</Text>
         <Text style={styles.questions}>
           {this.state.side === "question"
@@ -126,6 +124,7 @@ class Quiz extends Component {
         ) : null}
         {questionIndex + 1 < len ? (
           <ActionButton
+            disabled={!disabled}
             action={() => {
               return this.setState(prevState => {
                 return {
@@ -137,8 +136,10 @@ class Quiz extends Component {
             }}
             label={"NEXT QUESTION"}
           />
-        ) : (
-          <View style={styles.container}>
+        ) : disabled === true ? (
+          <View >
+            <Text style={styles.item}>Score: {score}%</Text>
+
             <ActionButton
               action={() => {
                 return this.setState({
@@ -156,7 +157,7 @@ class Quiz extends Component {
               label={"BACK TO DECK"}
             />
           </View>
-        )}
+        ) : null}
       </View>
     );
   }
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: white,
     padding: 15,
-    justifyContent: "space-between"
+    justifyContent: "space-around"
   },
   rowContainer: {
     flex: 1,
