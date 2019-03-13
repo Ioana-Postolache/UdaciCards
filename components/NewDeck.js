@@ -34,6 +34,10 @@ class NewDeck extends Component {
     const deck = this.state;
     const title = this.state.title;
 
+    if(!title) {
+    return alert("Please add the deck name")
+   }
+
     this.props.dispatch(
       addDeck({
         [title]: deck
