@@ -7,13 +7,6 @@ import {
   Platform,
   TextInput
 } from "react-native";
-import {
-  getMetricMetaInfo,
-  timeToString,
-  getDailyReminderValue,
-  clearLocalNotification,
-  setLocalNotification
-} from "../utils/helpers";
 import { Ionicons } from "@expo/vector-icons";
 import { addQuestionToDeck } from "../utils/api";
 import { connect } from "react-redux";
@@ -52,6 +45,9 @@ class NewQuestion extends Component {
       title: "New card"
     };
   };
+
+  onChangeTxtInput = txt => this.setState({ txt });
+
   submit = () => {
     const { question, answer } = this.state;
 
@@ -61,9 +57,7 @@ class NewQuestion extends Component {
       deckId,
       questionBody: { question, answer }
     };
-    this.props.dispatch(
-      addQuestion(q)
-    );
+    this.props.dispatch(addQuestion(q));
 
     this.setState(() => ({ question: "", answer: "" }));
 
@@ -90,14 +84,14 @@ class NewQuestion extends Component {
             style={styles.txtInput}
             placeholder="Question"
             placeholderTextColor={gray}
-            onChangeText={question => this.setState({ question })}
+            onChangeText={question => this.onChangeTxtInput(question)}
             value={this.state.question}
           />
           <TextInput
             style={styles.txtInput}
             placeholder="Answer"
             placeholderTextColor={gray}
-            onChangeText={answer => this.setState({ answer })}
+            onChangeText={ansswer => this.onChangeTxtInput(answer)}
             value={this.state.answer}
           />
         </View>
