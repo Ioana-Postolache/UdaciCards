@@ -46,7 +46,6 @@ class NewQuestion extends Component {
     };
   };
 
-  onChangeTxtInput = txt => this.setState({ txt });
 
   submit = () => {
     const { question, answer } = this.state;
@@ -61,7 +60,7 @@ class NewQuestion extends Component {
 
     this.setState(() => ({ question: "", answer: "" }));
 
-    this.toHome();
+    this.toIndividualDeck(deckId);
 
     addQuestionToDeck({
       deckId,
@@ -69,10 +68,10 @@ class NewQuestion extends Component {
     });
   };
 
-  toHome = () => {
-    this.props.navigation.dispatch(
-      NavigationActions.back({ key: "NewQuestion" })
-    );
+  toIndividualDeck = key => {
+    return this.props.navigation.navigate("IndividualDeck", {
+      deckId: key
+    });
   };
 
   render() {
@@ -84,14 +83,14 @@ class NewQuestion extends Component {
             style={styles.txtInput}
             placeholder="Question"
             placeholderTextColor={gray}
-            onChangeText={question => this.onChangeTxtInput(question)}
+            onChangeText={question => this.setState({ question })}
             value={this.state.question}
           />
           <TextInput
             style={styles.txtInput}
             placeholder="Answer"
             placeholderTextColor={gray}
-            onChangeText={ansswer => this.onChangeTxtInput(answer)}
+             onChangeText={answer => this.setState({ answer })}
             value={this.state.answer}
           />
         </View>
