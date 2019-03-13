@@ -14,6 +14,7 @@ import { getDailyReminderValue } from "../utils/helpers";
 import { fetchDecks, fetchStudiedToday } from "../utils/api";
 import { white, purple, gray, lightPurp } from "../utils/colors";
 import HeaderView from "./HeaderView";
+import DeckViewDetails from "./DeckViewDetails";
 import { AppLoading } from "expo";
 
 class DeckList extends Component {
@@ -48,23 +49,26 @@ class DeckList extends Component {
       <ScrollView style={styles.container}>
         <HeaderView headerText={"Deck List"} />
         <View style={styles.stretch}>
-          {Object.keys(decks).length !== 0 ? (
+          {decks && Object.keys(decks).length !== 0 ? (
             Object.keys(decks).map(key => {
               return decks[key] !== null ? (
                 <TouchableOpacity
                   style={styles.deck}
                   key={key}
-                  onPress={() =>{
-                    Animated.timing(this.state.opacity, {toValue: 1, duration: 1000})
+                  onPress={() => {
+                    Animated.timing(this.state.opacity, {
+                      toValue: 1,
+                      duration: 1000
+                    });
                     return this.props.navigation.navigate("IndividualDeck", {
                       deckId: key
-                    })}
-                  }
+                    });
+                  }}
                 >
-                  <Text style={styles.item}>{key}</Text>
-                  <Text style={styles.questions}>
-                    {decks[key].questions.length} questions
-                  </Text>
+                  <DeckViewDetails
+                    deckId={key}
+                    questionsLength={decks[key].questions.length}
+                  />
                 </TouchableOpacity>
               ) : null;
             })

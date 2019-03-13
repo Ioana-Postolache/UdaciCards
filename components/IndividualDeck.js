@@ -11,6 +11,7 @@ import { deleteDeck } from "../actions";
 import { removeDeck } from "../utils/api";
 import { getDailyReminderValue } from "../utils/helpers";
 import TextButton from "./TextButton";
+import DeckViewDetails from "./DeckViewDetails";
 import { gray, white, purple } from "../utils/colors";
 
 ActionButton = ({ action, label, key }) => {
@@ -56,8 +57,10 @@ class IndividualDeck extends Component {
     const key = deck.title;
     return (
       <View style={styles.container}>
-        <Text style={styles.item}>{deck.title}</Text>
-        <Text style={styles.questions}>{deck.questions.length} questions</Text>
+        <DeckViewDetails
+          deckId={deck.title}
+          questionsLength={deck.questions.length}
+        />
         <ActionButton
           action={() => {
             return this.props.navigation.navigate("NewQuestion", {
