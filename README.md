@@ -2,7 +2,7 @@
  Mobile application that allows users to study collections of flashcards.
 
 ## Start Project
-After adding the dependencies (by running "npm  install"), the app can be launched by running "npm start".
+After adding the dependencies (by running "npm  install"), the app can be launched by running "npm start". It can be run with Expo https://docs.expo.io/versions/latest/.
 
 ## Tested Platforms
 The app was created using create-react-native-app and tested on an Android emulator.
